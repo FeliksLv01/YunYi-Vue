@@ -1,0 +1,156 @@
+{
+  "id": "1731640",
+  "name": "gofastdfs",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "10058073",
+      "name": "icon_未知文件",
+      "font_class": "icon_weizhiwenjian",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "312606",
+      "name": "users",
+      "font_class": "users",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "581018",
+      "name": "icon-user",
+      "font_class": "iconuser",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "826128",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "1727367",
+      "name": "28体积、空间",
+      "font_class": "tijikongjian",
+      "unicode": "e89f",
+      "unicode_decimal": 59551
+    },
+    {
+      "icon_id": "2006729",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "2295978",
+      "name": "zip",
+      "font_class": "zip",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "2295991",
+      "name": "pdf",
+      "font_class": "pdf",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "3965525",
+      "name": "Microsoft-Excel",
+      "font_class": "Microsoft-Excel",
+      "unicode": "e6d6",
+      "unicode_decimal": 59094
+    },
+    {
+      "icon_id": "4031012",
+      "name": "exe",
+      "font_class": "exe",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "4183366",
+      "name": "AK-MN报表_fill",
+      "font_class": "mn_baobiao_fill",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "4628497",
+      "name": "WORD",
+      "font_class": "WORD",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "4628503",
+      "name": "PPT",
+      "font_class": "PPT",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "5331557",
+      "name": "file_music",
+      "font_class": "file_music",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "5365342",
+      "name": "文件",
+      "font_class": "wenjian",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "6049370",
+      "name": "txt",
+      "font_class": "txt",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "11448884",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "e80c",
+      "unicode_decimal": 59404
+    },
+    {
+      "icon_id": "11913482",
+      "name": "videos",
+      "font_class": "videos",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "11983530",
+      "name": "chrome",
+      "font_class": "chrome",
+      "unicode": "ea09",
+      "unicode_decimal": 59913
+    },
+    {
+      "icon_id": "12600749",
+      "name": "java",
+      "font_class": "java",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "13304033",
+      "name": "python",
+      "font_class": "python",
+      "unicode": "e690",
+      "unicode_decimal": 59024
+    }
+  ]
+}
