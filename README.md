@@ -1,29 +1,11 @@
-# fastdfs
+# YunYi-Vue
+![首页](https://s1.ax1x.com/2020/04/04/G0AbU1.png)
 
-## Project setup
+## 模块安装
 
 ```shell
 npm install
 ```
 
-### Compiles and hot-reloads for development
-
-```shell
-npm run serve
-```
-
-### Compiles and minifies for production
-
-```shell
-npm run build
-```
-
-### Lints and fixes files
-
-```shell
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 后端项目YunYi
+[地址](https://github.com/kcqnly/YunYi)
