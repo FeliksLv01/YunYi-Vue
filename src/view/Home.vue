@@ -97,7 +97,6 @@ export default {
         return this.$message.error(res.msg)
       }
       this.menuList = res.data
-      console.log(this.menuList)
     },
     toggleChange () {
       this.isCollapse = !this.isCollapse
