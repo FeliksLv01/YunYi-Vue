@@ -11,73 +11,43 @@
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
         <h2 class="login-title">云依网盘</h2>
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-iconuser"></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-iconuser" placeholder="用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" type="password"></el-input>
+          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" placeholder="密码" show-password>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="code">
+          <el-input v-model="loginForm.code" prefix-icon="el-icon-key" placeholder='点击图片更换验证码' type="text"
+            @keydown.enter.native="login()" style='width:200px;margin-right: 10px'></el-input>
+          <img :src="vcUrl" alt="验证码" @click="updateVerifyCode()">
         </el-form-item>
         <el-form-item style="margin-bottom: 5px;text-align: center">
           <el-button style="width: 45%" type="primary" @click="login()">登录</el-button>
-          <el-button style="width: 45%" type="primary" @click="dialogVisible = true">注册</el-button>
+          <!-- <el-button style="width: 45%" type="primary" @click="dialogVisible = true">注册</el-button> -->
         </el-form-item>
       </el-form>
     </el-card>
-    <!-- 添加用户信息的对话框 -->
-    <el-dialog title="添加用户" :visible.sync="dialogVisible" width="50%" @close="addFormClose()">
-      <!-- 内容主体区域 -->
-      <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="80px">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="addForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="addForm.password"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addForm.email"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="addForm.mobile"></el-input>
-        </el-form-item>
-      </el-form>
-      <!-- 底部区域 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="register()">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
+  created () {
+    this.updateVerifyCode()
+  },
   data () {
-    var checkEmail = (rule, value, callback) => {
-      const regEmail = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-
-      if (regEmail.test(value)) {
-        // 合法的邮箱
-        return callback()
-      }
-      callback(new Error('请输入合法的邮箱'))
-    }
-
-    var checkMobile = (rule, value, callback) => {
-      const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-      if (regMobile.test(value)) {
-        return callback()
-      }
-      callback(new Error('请输入合法的手机号'))
-    }
     return {
       str: '欢迎您来到云依网盘',
       i: 0,
       timer: 0,
       str2: '',
       isShown: false,
-      dialogVisible: false,
+      vcUrl: '/api/verifyCode',
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: '',
+        code: ''
       },
       // 这是表单的验证规则对象
       loginFormRules: {
@@ -90,33 +60,8 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
-        ]
-      },
-      // 添加用户的表单数据
-      addForm: {
-        username: '',
-        password: '',
-        email: '',
-        mobile: ''
-      },
-      // 添加表单的验证规则对象
-      addFormRules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
-        ],
-        email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { validator: checkEmail, trigger: 'blur' }
-        ],
-        mobile: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { validator: checkMobile, trigger: 'blur' }
-        ]
+        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       }
     }
   },
@@ -138,33 +83,23 @@ export default {
         clearTimeout(this.timer)
       }
     },
-    addFormClose () {
-      this.$refs.addFormRef.resetFields()
+    updateVerifyCode () {
+      this.vcUrl = '/api/verifyCode?time=' + new Date()
     },
     login () {
       this.$refs.loginFormRef.validate(async valid => {
         // valid是一个布尔值，这是一个回调函数
         if (!valid) return 0
         // await只能用在被async修饰的方法中，只有当返回的数据是promise时才能使用
-        const { data: res } = await this.$http.post('/api/authentication/login', this.loginForm)
+        const { data: res } = await this.$http.post('/api/login', this.loginForm)
         if (res.status !== 200) {
-          return this.$message.error(res.message)
+          console.log(res)
+          this.updateVerifyCode()
+          return this.$message.error(res.msg)
         }
         this.$message.success('登陆成功')
         window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('home')
-      })
-    },
-    register () {
-      this.$refs.addFormRef.validate(async valid => {
-        if (!valid) return 0
-        const { data: res } = await this.$http.post('/api/authentication/register', this.addForm)
-        if (res.status !== 200) {
-          return this.$message.error(res.message)
-        }
-        this.$message.success('注册成功')
-        this.dialogVisible = false
-        this.addFormClose()
       })
     }
   }
@@ -201,5 +136,10 @@ h1 {
 .login-title {
   text-align: center;
   color: #409eff;
+}
+.el-form-item__content {
+  display: flex;
+  align-items: center;
+  // 垂直居中
 }
 </style>
