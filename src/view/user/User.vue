@@ -1,11 +1,5 @@
 <template>
   <div>
-    <!-- 面包屑导航 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
       <!-- 搜索框与添加区域 -->
@@ -21,18 +15,18 @@
       </el-row>
       <!-- 用户列表区 -->
       <el-table :data="userlist" border stripe>
-        <el-table-column type="index" label="序号"></el-table-column>
+        <el-table-column type="index" label="序号" width="60px"></el-table-column>
         <el-table-column label="姓名" prop="username"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="mobile"></el-table-column>
         <el-table-column label="角色" prop="roleName"></el-table-column>
-        <el-table-column label="状态">
+        <el-table-column label="状态" width="100px">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.state" @change="userStateChange(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180px">
+        <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
             <!-- 修改 -->
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
@@ -203,7 +197,6 @@ export default {
   methods: {
     async getUserList () {
       const { data: res } = await this.$http.get('/api/users', { params: this.queryInfo })
-      console.log(res)
       if (res.status !== 200) {
         return this.$message.error('获取用户列表失败')
       }
@@ -319,8 +312,11 @@ export default {
 <style lang="less" scoped>
 .el-table {
   margin-bottom: 10px;
+  font-size: 16px;
 }
-
+.el-button {
+  font-size: 16px;
+}
 .el-row {
   margin-bottom: 10px;
 }

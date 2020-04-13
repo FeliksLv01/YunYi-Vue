@@ -4,6 +4,8 @@ import router from './router'
 import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/font/iconfont.css'
+import './assets/font/iconfont.js'
+import './assets/font-awesome/css/font-awesome.min.css'
 import axios from 'axios'
 
 axios.interceptors.request.use(config => {

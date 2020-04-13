@@ -2,8 +2,8 @@
   <el-container class="home-container">
     <el-aside :width="isCollapse ? '64px' : '200px'">
       <div style="text-align:center">
-        <svg t="1586276749157" class="icon" viewBox="0 0 1408 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          p-id="1871" width="54px" height="54px">
+        <svg t="1586276749157" viewBox="0 0 1408 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1871"
+          width="54px" height="54px">
           <path
             d="M620.8 454.4h19.2c19.2 0 32-12.8 32-32s-12.8-32-32-32h-19.2c-44.8 0-76.8-25.6-76.8-57.6s32-57.6 76.8-57.6c12.8 0 19.2 0 32 6.4 19.2 6.4 38.4-6.4 44.8-25.6 0-19.2 25.6-32 51.2-32 32 0 51.2 19.2 51.2 38.4v6.4c-6.4 19.2 6.4 38.4 25.6 44.8 25.6 6.4 38.4 19.2 38.4 38.4s-25.6 38.4-51.2 38.4h-25.6c-19.2 0-32 12.8-32 32s12.8 32 32 32h25.6c64 0 115.2-44.8 115.2-102.4 0-38.4-25.6-76.8-64-89.6 0-57.6-57.6-102.4-115.2-102.4-44.8 0-83.2 19.2-102.4 57.6h-25.6c-76.8 0-140.8 51.2-140.8 121.6s64 115.2 140.8 115.2zM544 768h-320c-19.2 0-32 12.8-32 32s12.8 32 32 32h320c19.2 0 32-12.8 32-32s-12.8-32-32-32z"
             fill="#909399" p-id="1872"></path>
@@ -43,13 +43,22 @@
       <el-header>
         <!-- <div class="toggle-button" @click="toggleCollapse">|||</div> -->
         <hamburger :is-active="!isCollapse" class="hamburger-container" @toggleClick="toggleChange()" />
-
-        <div>
-          <span>后台管理系统</span>
+        <div style="display: flex;align-items: center;">
+          <span style="margin-left: 15px;">云依网盘</span>
+        </div>
+        <div @click="screenfull()" class="fullscreen">
+          <svg t="1586700823354" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="2320" width="28" height="28" style="vertical-align:-0.5em;">
+            <path
+              d="M376.96 107.52V0H0v376.96h107.52V184.32l242.56 242.56 76.8-76.8-242.56-242.56h192.64z m-26.88 490.24L107.52 840.32V647.04H0V1024h376.96V916.48H184.32l242.56-242.56-76.8-76.16zM916.48 0H647.04v107.52h193.28L597.76 350.08l76.16 76.8 242.56-242.56v192.64H1024V0H916.48z m0 840.32L673.92 597.76l-76.16 76.16 242.56 242.56H647.04V1024H1024V647.04H916.48v193.28z"
+              p-id="2321" fill="#707070"></path>
+          </svg>
         </div>
         <el-button type="info" @click="logout"> 退出</el-button>
+
       </el-header>
       <el-main>
+        <breadCrumb />
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>
@@ -58,10 +67,12 @@
 </template>
 
 <script>
+import screenfull from 'screenfull'
 import Hamburger from '../components/Hamburger'
+import BreadCrumb from '../components/BreadCrumb'
 export default {
   components: {
-    Hamburger
+    Hamburger, BreadCrumb
   },
   data () {
     return {
@@ -75,7 +86,7 @@ export default {
         127: 'iconfont icon-setting'
 
       },
-
+      isFullscreen: false,
       isCollapse: false,
       // 被激活的连接地址
       acvtivePath: ''
@@ -84,6 +95,15 @@ export default {
   created () {
     this.getMenuList()
     this.acvtivePath = window.sessionStorage.getItem('acvtivePath')
+  },
+  mounted () {
+    window.onresize = () => {
+      // 全屏下监控是否按键了ESC
+      if (!this.checkFull()) {
+        // 全屏下按键esc后要执行的动作
+        this.isFullscreen = false
+      }
+    }
   },
   methods: {
     logout () {
@@ -104,6 +124,24 @@ export default {
     saveNavState (acvtivePath) {
       window.sessionStorage.setItem('acvtivePath', acvtivePath)
       this.acvtivePath = acvtivePath
+    },
+    /**
+     * 全屏事件
+     */
+    screenfull () {
+      screenfull.toggle()
+      this.isFullscreen = true
+    },
+    /**
+     * 是否全屏并按键ESC键的方法
+     */
+    checkFull () {
+      var isFull = document.fullscreenEnabled || window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled
+      // to fix : false || undefined == undefined
+      if (isFull === undefined) {
+        isFull = false
+      }
+      return isFull
     }
   }
 }
@@ -121,13 +159,6 @@ export default {
   align-items: center;
   color: #97a8be;
   font-size: 18px;
-  > div {
-    display: flex;
-    align-items: center;
-    span {
-      margin-left: 15px;
-    }
-  }
 }
 .el-aside {
   background-color: #304156;
@@ -137,6 +168,9 @@ export default {
 }
 .el-main {
   background-color: #eff1f4;
+}
+span {
+  font-size: 16px;
 }
 .iconfont {
   margin-right: 10px;
@@ -158,5 +192,9 @@ export default {
 }
 .iconfont {
   margin-right: 10px;
+}
+.fullscreen {
+  position: absolute;
+  right: 110px;
 }
 </style>

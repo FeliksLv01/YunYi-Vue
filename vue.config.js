@@ -1,5 +1,6 @@
 module.exports = {
   devServer: {
+    port: 5000,
     proxy: {
       '/api': {
         target: 'http://localhost:8888', // 要请求的后台地址

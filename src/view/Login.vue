@@ -33,9 +33,6 @@
 
 <script>
 export default {
-  created () {
-    this.updateVerifyCode()
-  },
   data () {
     return {
       str: '欢迎您来到云依网盘',
@@ -43,7 +40,7 @@ export default {
       timer: 0,
       str2: '',
       isShown: false,
-      vcUrl: '/api/verifyCode',
+      vcUrl: '',
       loginForm: {
         username: '',
         password: '',
@@ -70,6 +67,7 @@ export default {
   },
   methods: {
     changeShown () {
+      this.updateVerifyCode()
       this.isShown = !this.isShown
     },
     typing () {
@@ -93,8 +91,6 @@ export default {
         // await只能用在被async修饰的方法中，只有当返回的数据是promise时才能使用
         const { data: res } = await this.$http.post('/api/login', this.loginForm)
         if (res.status !== 200) {
-          console.log(res)
-          this.updateVerifyCode()
           return this.$message.error(res.msg)
         }
         this.$message.success('登陆成功')
@@ -114,15 +110,15 @@ h1 {
   font-size: 50px;
 }
 .login-container {
-  background: url("../assets/background.jpg");
+  background: url("../assets/image/background.jpg");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   height: 100%;
 }
 .btn {
-  font-size: 30px;
   height: 80px;
   width: 250px;
+  font-size: 30px;
 }
 .login-form {
   // background-color: aliceblue;
