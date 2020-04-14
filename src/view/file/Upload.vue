@@ -9,14 +9,15 @@
           <div class="inputlist">
             <div class="input">
               <div class="title">路径：</div>
-              <el-input placehold="请输入路径" v-model="path"></el-input>
+              <el-input placehold="请输入路径" v-model="params.path"></el-input>
             </div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="24" class="fileupload-bottom">
         <el-card class="uploadcard">
-          <el-upload ref="upload" drag :action="url" :headers="headers" multiple :show-file-list="true">
+          <el-upload ref="upload" drag action="/api/file/upload/" :headers="headers" :multiple="true"
+            :show-file-list="true" :data="params">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           </el-upload>
@@ -30,17 +31,12 @@
 export default {
   data () {
     return {
-      path: 'default',
-      fileList: [],
       headers: {
         Authorization: 'Bearer ' + window.sessionStorage.getItem('token')
       },
-      url: '/api/file/upload/default'
-    }
-  },
-  watch: {
-    path (newval) {
-      this.url = '/api/file/upload/' + newval
+      params: {
+        path: 'default'
+      }
     }
   }
 }

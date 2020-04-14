@@ -1,16 +1,16 @@
 <template>
   <div class="filelist">
     <el-card>
-      <div slot="header">
+      <div slot="header" class="card-head">
         <div class="bread">
-          <el-breadcrumb separator="/" style="font-size:12px;margin-top:3px">
+          <el-breadcrumb separator="/" style="font-size:12px;">
             <el-breadcrumb-item><a href="javascript:;" @click="getParentFile()"> 全部文件</a> </el-breadcrumb-item>
             <el-breadcrumb-item v-for="(item,index) in pathlist" :key="index">
               <a href="javascript:;" @click="listChange(index)">{{ item }}</a>
             </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <el-button style="float: right; padding: 10px 10px" type="primary" @click="gotoUpload()">上传文件</el-button>
+        <el-button type="primary" @click="gotoUpload()">上传文件</el-button>
       </div>
       <div class="bottom">
         <el-table :data="filelist">
@@ -33,18 +33,27 @@
           </el-table-column>
           <el-table-column label="操作" width="300px">
             <template slot-scope="scope" v-if="scope.row.type!=='directory'">
-              <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-              <el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">下载</el-button>
+              <el-button size="mini" type="primary" @click="showDetail(scope.row.md5)">详情</el-button>
+              <el-button size="mini" type="success" @click="downloadfile(scope.row.path,scope.row.name)">下载</el-button>
               <el-button size="mini" type="danger" @click="deletefile(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </el-card>
+    <el-dialog title="文件详情" :visible.sync="detailVisable" width="30%">
+      <div>
+        <p><b>名称：</b>{{ fileDetails.name }}</p>
+        <p><b>文件路径：</b>{{ fileDetails.path }}</p>
+        <p><b>大小：</b>{{ fileDetails.size }} </p>
+        <p><b>创建时间：</b>{{ fileDetails.timeStamp }}</p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
 export default {
   data () {
     return {
@@ -65,8 +74,9 @@ export default {
         java: '#icon-java',
         py: '#icon-python',
         unkonwn: '#icon-icon_weizhiwenjian'
-      }
-
+      },
+      detailVisable: false,
+      fileDetails: {}
     }
   },
   created () {
@@ -84,6 +94,7 @@ export default {
       }
       this.filelist = res.data
     },
+    // 根据目录获取
     async getDirFile (fileInfo) {
       if (fileInfo.type !== 'directory') { return }
       let url = ''
@@ -111,7 +122,25 @@ export default {
       }
       this.filelist = res.data
     },
+    // 获取文件详情
+    async showDetail (key) {
+      const { data: res } = await this.$http.post('/api/file/details', qs.stringify({ md5: key }))
+
+      if (res.status !== 200) {
+        return this.$message.error('获取失败')
+      }
+      this.fileDetails = res.data
+      this.detailVisable = true
+    },
     async deletefile (fileinfo) {
+      const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(err => err)
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已经取消删除')
+      }
       const { data: res } = await this.$http.delete(`/api/file/delete/${fileinfo.md5}`)
       if (res.status !== 200) {
         return this.$message.error('删除失败')
@@ -119,7 +148,29 @@ export default {
 
       this.filelist.splice(this.filelist.indexOf(fileinfo), 1)
       return this.$message.success('删除成功')
+    },
+    downloadfile (path, name) {
+      const params = {
+        path: path,
+        name: name
+      }
+      this.$http.get('/api/file/downloadFile', { params: params }).then(res => {
+        const headers = res.headers
+        const blob = new Blob([res.data], {
+          type: headers['content-type']
+        })
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        if (!name) {
+          const fileName = headers['content-disposition']
+          name = fileName.includes('filename=') ? fileName.split('=')[1] : '下载的表单文件'
+        }
+        link.download = name
+        link.click()
+      })
+      return this.$message.success('成功开始下载......')
     }
+
   }
 }
 </script>
@@ -145,5 +196,11 @@ export default {
 }
 .bread a:hover {
   color: #000000;
+}
+.card-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

@@ -10,6 +10,7 @@ import axios from 'axios'
 
 axios.interceptors.request.use(config => {
   config.headers.Authorization = 'Bearer ' + window.sessionStorage.getItem('token')
+  // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
   return config
 })
 

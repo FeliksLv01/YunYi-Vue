@@ -156,7 +156,6 @@ export default {
         dayFileCountList: this.consoleParam.dayFileCountList,
         dayFileSizeList: this.consoleParam.dayFileSizeList
       }
-      console.log(chart)
       var myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         color: ['#445e75', '#45a7ca', '#98d5ef'],
