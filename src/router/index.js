@@ -8,6 +8,7 @@ import Rights from '../view/power/Rights.vue'
 import Roles from '../view/power/Roles.vue'
 import Upload from '../view/file/Upload.vue'
 import FileList from '../view/file/FileList.vue'
+import UserInfo from '../view/user/UserInfo.vue'
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,13 @@ const routes = [
           parentTitle: '文件管理', title: '文件列表'
         },
         component: FileList
+      },
+      {
+        path: '/userinfo',
+        meta: {
+          parentTitle: '个人中心', title: '修改个人信息'
+        },
+        component: UserInfo
       }
     ]
   },
