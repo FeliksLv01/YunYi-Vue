@@ -20,10 +20,9 @@
               <!-- 图标 -->
               <div @click="getDirFile(scope.row)" style="cursor: pointer;">
                 <svg class="icon" aria-hidden="true">
-                  <use :xlink:href="iconObj[scope.row.type]" v-if="iconObj[scope.row.type]"></use>
-                  <use :xlink:href="iconObj['unkonwn']" v-if="!iconObj[scope.row.type]"> </use>
+                  <use :xlink:href="iconName(scope.row.type)"></use>
                 </svg>
-                <span style="font-size:16px"> {{scope.row.name}} </span>
+                <span style=" font-size:16px"> {{scope.row.name}} </span>
               </div>
             </template>
           </el-table-column>
@@ -54,29 +53,12 @@
 
 <script>
 import qs from 'qs'
+import * as fileUtil from '@/utils/fileUtil'
 export default {
   data () {
     return {
       filelist: [],
       pathlist: [],
-      iconObj: {
-        directory: '#icon-wenjianjia',
-        jpg: '#icon-tupian',
-        png: '#icon-tupian',
-        rar: '#icon-zip',
-        zip: '#icon-zip',
-        pdf: '#icon-pdf',
-        xlsx: '#icon-Microsoft-Excel',
-        exe: '#icon-exe',
-        docx: '#icon-WORD',
-        mp3: '#icon-file_music',
-        txt: '#icon-txt',
-        mp4: '#icon-videos',
-        html: '#icon-chrome',
-        java: '#icon-java',
-        py: '#icon-python',
-        unkonwn: '#icon-icon_weizhiwenjian'
-      },
       detailVisable: false,
       fileDetails: {},
       previewVisible: false,
@@ -85,6 +67,14 @@ export default {
   },
   created () {
     this.getParentFile()
+  },
+  computed: {
+    iconName () {
+      return function (type) {
+        const iconName = fileUtil.getIconName(type)
+        return iconName
+      }
+    }
   },
   methods: {
     gotoUpload () {
