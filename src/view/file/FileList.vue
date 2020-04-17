@@ -22,8 +22,8 @@
                 <svg class="icon" aria-hidden="true">
                   <use :xlink:href="iconObj[scope.row.type]" v-if="iconObj[scope.row.type]"></use>
                   <use :xlink:href="iconObj['unkonwn']" v-if="!iconObj[scope.row.type]"> </use>
-                </svg> <span style="font-size:16px">
-                  {{scope.row.name}}</span>
+                </svg>
+                <span style="font-size:16px"> {{scope.row.name}} </span>
               </div>
             </template>
           </el-table-column>
@@ -62,6 +62,8 @@ export default {
       iconObj: {
         directory: '#icon-wenjianjia',
         jpg: '#icon-tupian',
+        png: '#icon-tupian',
+        rar: '#icon-zip',
         zip: '#icon-zip',
         pdf: '#icon-pdf',
         xlsx: '#icon-Microsoft-Excel',
@@ -76,7 +78,9 @@ export default {
         unkonwn: '#icon-icon_weizhiwenjian'
       },
       detailVisable: false,
-      fileDetails: {}
+      fileDetails: {},
+      previewVisible: false,
+      dialogImageUrl: ''
     }
   },
   created () {
@@ -132,7 +136,7 @@ export default {
       this.fileDetails = res.data
       this.detailVisable = true
     },
-    async deletefile (fileinfo) {
+    async deletefile (fileInfo) {
       const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -141,12 +145,12 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已经取消删除')
       }
-      const { data: res } = await this.$http.delete(`/api/file/delete/${fileinfo.md5}`)
+      const { data: res } = await this.$http.delete(`/api/file/delete/${fileInfo.md5}`)
       if (res.status !== 200) {
         return this.$message.error('删除失败')
       }
 
-      this.filelist.splice(this.filelist.indexOf(fileinfo), 1)
+      this.filelist.splice(this.filelist.indexOf(fileInfo), 1)
       return this.$message.success('删除成功')
     },
     downloadfile (path, name) {
@@ -154,20 +158,25 @@ export default {
         path: path,
         name: name
       }
-      this.$http.get('/api/file/downloadFile', { params: params }).then(res => {
-        const headers = res.headers
-        const blob = new Blob([res.data], {
-          type: headers['content-type']
-        })
-        const link = document.createElement('a')
-        link.href = window.URL.createObjectURL(blob)
-        if (!name) {
-          const fileName = headers['content-disposition']
-          name = fileName.includes('filename=') ? fileName.split('=')[1] : '下载的表单文件'
+      this.$http({
+        url: '/api/file/downloadFile',
+        method: 'get',
+        params: params,
+        responseType: 'blob' // 接收类型设置，否者返回字符型
+      }).then(res => { // 定义文件名等相关信息
+        const blob = res.data
+        const reader = new FileReader()
+        reader.readAsDataURL(blob)
+        reader.onload = (e) => {
+          const a = document.createElement('a')
+          a.download = name
+          a.href = e.target.result
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
         }
-        link.download = name
-        link.click()
       })
+
       return this.$message.success('成功开始下载......')
     }
 

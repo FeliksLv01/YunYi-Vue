@@ -7,10 +7,18 @@ import './assets/font/iconfont.css'
 import './assets/font/iconfont.js'
 import './assets/font-awesome/css/font-awesome.min.css'
 import axios from 'axios'
+// 导入NProgress包对应的JS和CSS
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 axios.interceptors.request.use(config => {
+  NProgress.start()
   config.headers.Authorization = 'Bearer ' + window.sessionStorage.getItem('token')
-  // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+  return config
+})
+
+axios.interceptors.response.use(config => {
+  NProgress.done()
   return config
 })
 
