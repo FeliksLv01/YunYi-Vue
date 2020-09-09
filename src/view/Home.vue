@@ -79,11 +79,11 @@ export default {
       // 左侧菜单数据
       menuList: [],
       iconObj: {
-        101: 'iconfont icon-mn_baobiao_fill',
+        100: 'iconfont icon-mn_baobiao_fill',
         102: 'iconfont icon-users',
-        110: 'iconfont icon-tijikongjian',
-        122: 'iconfont icon-wenjian',
-        127: 'iconfont icon-setting'
+        109: 'iconfont icon-tijikongjian',
+        121: 'iconfont icon-wenjian',
+        126: 'iconfont icon-setting'
 
       },
       isFullscreen: false,
