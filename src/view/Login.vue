@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div style="text-align: center; padding-top: 250px;" v-show="!isShown">
-      <h1>{{str2}}</h1>
+      <h1>{{ str2 }}</h1>
       <el-button round class="btn" @click="changeShown()">Click Here</el-button>
     </div>
     <el-card class="login-form" shadow="always" v-show="isShown">
@@ -11,16 +11,30 @@
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
         <h2 class="login-title">云依网盘</h2>
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-iconuser" placeholder="用户名"></el-input>
+          <el-input
+            v-model="loginForm.username"
+            prefix-icon="iconfont icon-iconuser"
+            placeholder="用户名"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" placeholder="密码" show-password>
-          </el-input>
+          <el-input
+            v-model="loginForm.password"
+            prefix-icon="iconfont icon-mima"
+            placeholder="密码"
+            show-password
+          ></el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input v-model="loginForm.code" prefix-icon="el-icon-key" placeholder='点击图片更换验证码' type="text"
-            @keydown.enter.native="login()" style='width:200px;margin-right: 10px'></el-input>
-          <img :src="vcUrl" alt="验证码" @click="updateVerifyCode()">
+          <el-input
+            v-model="loginForm.code"
+            prefix-icon="el-icon-key"
+            placeholder="点击图片更换验证码"
+            type="text"
+            @keydown.enter.native="login()"
+            style="width:200px;margin-right: 10px"
+          ></el-input>
+          <img :src="vcUrl" alt="验证码" @click="updateVerifyCode()" />
         </el-form-item>
         <el-form-item style="margin-bottom: 5px;text-align: center">
           <el-button style="width: 45%" type="primary" @click="login()">登录</el-button>
@@ -116,9 +130,9 @@ h1 {
   height: 100%;
 }
 .btn {
-  height: 80px;
-  width: 250px;
-  font-size: 30px;
+  height: 50px;
+  width: 150px;
+  font-size: 20px;
 }
 .login-form {
   // background-color: aliceblue;
